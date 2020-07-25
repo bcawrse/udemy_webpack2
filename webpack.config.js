@@ -1,5 +1,5 @@
 const path = require('path');
-const extractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const config = {
     entry: './src/index.js',
@@ -7,23 +7,35 @@ const config = {
         path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js'
     },
+    optimization: {
+        minimize: false
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+            chunkFilename: '[id].css',
+            ignoreOrder: false,
+        })
+    ],
     module: {
         rules: [
             {
                 test: /\.js$/,
                 loader: 'babel-loader'
-                
             },
             {
                 test: /\.css$/,
-                loader: extractTextPlugin.extract({
-                    loader: 'css-loader'
-                })
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader, 
+                        options: {
+                            esModule: true
+                        }
+                    },
+                    'css-loader'
+                ]
             }
         ]
-    },
-    optimization: {
-        minimize: false
     }
 };
 

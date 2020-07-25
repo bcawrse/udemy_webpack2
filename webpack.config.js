@@ -10,13 +10,6 @@ const config = {
     optimization: {
         minimize: false
     },
-    plugins: [
-        new MiniCssExtractPlugin({
-            filename: '[name].css',
-            chunkFilename: '[id].css',
-            ignoreOrder: false,
-        })
-    ],
     module: {
         rules: [
             {
@@ -34,9 +27,26 @@ const config = {
                     },
                     'css-loader'
                 ]
+            },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: { limit: 40000 }
+                    },
+                    'image-webpack-loader'
+                ]
             }
         ]
-    }
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: '[name].css',
+            chunkFilename: '[id].css',
+            ignoreOrder: false,
+        })
+    ]
 };
 
 module.exports = config;
